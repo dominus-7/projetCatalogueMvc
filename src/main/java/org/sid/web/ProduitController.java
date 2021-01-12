@@ -15,25 +15,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ProduitController {
 	@Autowired
 	private ProduitRepository produitRepository;
-	
-	
+
+	// Page d'accueil
 	@RequestMapping(value = "/index")
-	public String index(Model model,@RequestParam(name = "page", defaultValue = "0")int p, @RequestParam(name = "size", defaultValue = "5")int s,@RequestParam(name = "motCle", defaultValue = "")String mc) {
-		Page<Produit> pageProduits = produitRepository.chercher("%"+mc+"%",PageRequest.of(p, s));
-		model.addAttribute("listProduits",pageProduits.getContent());
+	public String index(Model model, @RequestParam(name = "page", defaultValue = "0") int p,
+			@RequestParam(name = "size", defaultValue = "5") int s,
+			@RequestParam(name = "motCle", defaultValue = "") String mc) {
+		Page<Produit> pageProduits = produitRepository.chercher("%" + mc + "%", PageRequest.of(p, s));
+		model.addAttribute("listProduits", pageProduits.getContent());
 		int[] pages = new int[pageProduits.getTotalPages()];
-		model.addAttribute("pages",pages);
-		model.addAttribute("size",s);
-		model.addAttribute("pageCourante",p);
-		model.addAttribute("motCle",mc);
+		model.addAttribute("pages", pages);
+		model.addAttribute("size", s);
+		model.addAttribute("pageCourante", p);
+		model.addAttribute("motCle", mc);
 		return "produits";
 	}
-	
-	
-	@RequestMapping(value = "/delete",method= RequestMethod.GET)
-	public String delete(Long id,String motCle, int page, int size) {
+
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	public String delete(Long id, String motCle, int page, int size) {
 		produitRepository.delete(id);
-		return "redirect:/index?page="+page+"&size="+size+"&motCle="+motCle;
+		return "redirect:/index?page=" + page + "&size=" + size + "&motCle=" + motCle;
 	}
 
 }
